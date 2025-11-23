@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Te quiero mucho ❤️</title>
+
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      background: linear-gradient(135deg, #ffd0d0 0%, #fff6f6 100%);
+      overflow: hidden;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      position: relative;
+      color: #e63946;
+    }
+
+    /* ❤️ Corazón brillante del centro */
+    .big-heart-container {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      z-index: 5;
+      animation: pulse 2s infinite ease-in-out;
+      user-select: none;
+    }
+
+    .big-heart {
+      font-size: 110px;
+      filter: drop-shadow(0 0 25px rgba(255, 0, 80, 0.7));
+    }
+
+    .heart-text {
+      margin-top: -10px;
+      font-size: 2.3rem;
+      font-weight: 700;
+      color: #d62839;
+      text-shadow: 0 0 10px rgba(255, 0, 80, 0.7);
+    }
+
+    @keyframes pulse {
+      0% { transform: translate(-50%, -50%) scale(1); }
+      50% { transform: translate(-50%, -50%) scale(1.15); }
+      100% { transform: translate(-50%, -50%) scale(1); }
+    }
+
+    /* Barra de carga */
+    .progress-container {
+      position: fixed;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 85%;
+      max-width: 520px;
+      background: #fcd9d9;
+      border-radius: 30px;
+      overflow: hidden;
+      height: 28px;
+      box-shadow: 0 0 10px rgba(230,57,70,0.5);
+      border: 2px solid #e63946;
+      z-index: 10;
+    }
+    .progress-bar {
+      height: 100%;
+      background: #e63946;
+      width: 0%;
+      border-radius: 30px 0 0 30px;
+      transition: width 0.3s ease;
+    }
+    .progress-text {
+      position: fixed;
+      bottom: 80px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #e63946;
+      opacity: 0;
+      transition: opacity 0.8s ease 0.3s;
+      text-shadow: 0 0 8px #e63946;
+      z-index: 10;
+    }
+
+    /* Estela */
+    .heart-trail-container {
+      position: fixed;
+      bottom: 90px;
+      left: 0;
+      width: 100vw;
+      height: 50px;
+      pointer-events: none;
+      z-index: 12;
+      overflow: visible;
+    }
+
+    .heart-trail {
+      position: absolute;
+      width: 22px;
+      height: 22px;
+      background: #e63946;
+      transform: rotate(45deg);
+      opacity: 0.7;
+      animation-timing-function: ease-in-out;
+    }
+
+    .heart-trail::before,
+    .heart-trail::after {
+      content: '';
+      position: absolute;
+      width: 22px;
+      height: 22px;
+      background: #e63946;
+      border-radius: 50%;
+    }
+
+    .heart-trail::before {
+      top: -11px;
+      left: 0;
+    }
+
+    .heart-trail::after {
+      top: 0;
+      left: 11px;
+    }
+
+    /* Animación estela */
+    @keyframes moveRightZigzag {
+      0% { left: -30px; transform: translateY(0) rotate(45deg); opacity: 1; }
+      25% { transform: translateY(-10px) rotate(45deg); }
+      50% { left: calc(100vw + 30px); transform: translateY(0) rotate(45deg); }
+      75% { transform: translateY(10px) rotate(45deg); }
+      100% { left: -30px; opacity: 0; }
+    }
+
+    /* ❤️ Lluvia de corazones */
+    .falling-heart {
+      position: fixed;
+      top: -40px;
+      color: #e63946;
+      font-size: 20px;
+      opacity: 0.9;
+      animation: fallDown linear infinite;
+      z-index: 20;
+      user-select: none;
+    }
+
+    @keyframes fallDown {
+      0% { transform: translateY(-50px) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ❤️ Corazón brillante del centro -->
+  <div class="big-heart-container">
+    <div class="big-heart">❤️</div>
+    <div class="heart-text">Te quiero mucho</div>
+  </div>
+
+  <!-- Barra de progreso -->
+  <div class="progress-container">
+    <div class="progress-bar"></div>
+  </div>
+  <div class="progress-text">Abrazo enviado ❤️</div>
+
+  <!-- Estela -->
+  <div class="heart-trail-container" id="heart-trail-container"></div>
+
+  <script>
+    const progressBar = document.querySelector('.progress-bar');
+    const progressText = document.querySelector('.progress-text');
+    const trailContainer = document.getElementById('heart-trail-container');
+
+    let progress = 0;
+    let animationStarted = false;
+
+    function createHeartTrail() {
+      const heartCount = 6;
+      trailContainer.innerHTML = '';
+
+      for (let i = 0; i < heartCount; i++) {
+        const heart = document.createElement('div');
+        heart.classList.add('heart-trail');
+
+        heart.style.animation = `moveRightZigzag 8000ms ease-in-out infinite`;
+        heart.style.animationDelay = `${i * 1400}ms`;
+
+        const scale = 0.7 + Math.random() * 0.6;
+        heart.style.transform = `rotate(45deg) scale(${scale})`;
+
+        heart.style.bottom = `${5 + Math.random() * 30}px`;
+        heart.style.opacity = 0.5 + Math.random() * 0.4;
+
+        trailContainer.appendChild(heart);
+      }
+    }
+
+    function advanceProgress() {
+      if (progress < 100) {
+        progress++;
+        progressBar.style.width = progress + '%';
+      } else if (!animationStarted) {
+        animationStarted = true;
+        clearInterval(progressInterval);
+        progressText.style.opacity = 1;
+        createHeartTrail();
+      }
+    }
+
+    const progressInterval = setInterval(advanceProgress, 50);
+
+    /* Lluvia de corazones */
+    function createFallingHeart() {
+      const heart = document.createElement("div");
+      heart.classList.add("falling-heart");
+      heart.textContent = "❤️";
+
+      heart.style.left = Math.random() * 100 + "vw";
+      heart.style.fontSize = (16 + Math.random() * 24) + "px";
+      heart.style.animationDuration = (3 + Math.random() * 3) + "s";
+
+      document.body.appendChild(heart);
+      setTimeout(() => heart.remove(), 6000);
+    }
+
+    setInterval(createFallingHeart, 300);
+  </script>
+
+</body>
+</html>
